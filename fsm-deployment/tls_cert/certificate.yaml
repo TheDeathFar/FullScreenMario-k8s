@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: selfsigned-cert
+  namespace: cert-manager
+spec:
+  commonName: fullscreenmario-ds.ru
+  secretName: tls-fsm-secret
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigned-issuer
+    group: cert-manager.io

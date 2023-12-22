@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fsm-deployment
+  namespace: fsm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fsm-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: fsm-app
+    spec:
+      containers:
+        - name: fsm-app
+          image: deathfar/fsm_nginx
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "200m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - "ps -A | grep nginx"
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
