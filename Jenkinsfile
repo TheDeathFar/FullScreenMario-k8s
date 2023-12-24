@@ -7,7 +7,7 @@ pipeline {
         spec:
           containers:
           - name: kubectl
-            image: smesch/kubectl
+            image: deathfar/kubectl:1.29.0
             command:
             - cat
             tty: true
@@ -35,7 +35,7 @@ pipeline {
     stages {
         stage('Checkout Source') {
             steps {
-                git 'https://github.com/TheDeathFar/FullScreenMario-k8s'
+                git branch: 'main', url: 'https://github.com/TheDeathFar/FullScreenMario-k8s.git'
             }
         }
         stage('Build image') {
@@ -59,7 +59,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploying ctfd container to Kubernetes') {
+        stage('Deploying mario container to Kubernetes') {
             steps {
                 script {
                     container('kubectl') {
